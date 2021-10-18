@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from coinbase import Response
+from coinbase_pro import Response
 
 from requests.models import PreparedRequest
 
@@ -41,7 +41,11 @@ class AbstractAPI(abc.ABC):
 
 class AbstractAuth(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, key: str, secret: str, passphrase: str):
+    def __init__(self,
+                 key: str = None,
+                 secret: str = None,
+                 passphrase: str = None):
+
         pass
 
     @abc.abstractmethod
@@ -59,7 +63,7 @@ class AbstractAuth(abc.ABC):
 
 class AbstractMessenger(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, auth: AbstractAuth):
+    def __init__(self, auth: AbstractAuth = None):
         pass
 
     @abc.abstractproperty
