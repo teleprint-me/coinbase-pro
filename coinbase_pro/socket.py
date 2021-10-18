@@ -1,4 +1,4 @@
-# w3rw - A Wrapper for Cryptocurrency Interfaces
+# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify

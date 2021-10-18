@@ -16,7 +16,7 @@
 import requests
 import typing
 
-__agent__: str = 'w3rw'
+__agent__: str = 'teleprint-me/coinbase-pro'
 __source__: str = 'https://github.com/teleprint-me/coinbase-pro'
 __version__: str = '1.0.2'
 __timeout__: float = 1 / 3.5
