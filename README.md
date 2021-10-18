@@ -12,7 +12,7 @@
 
 - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
 
-- [Documentation](https://github.com/teleprint-me/ledger-api/tree/main/docs)
+- [Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
 
     Install the coinbase-pro library and learn how it works
 
