@@ -29,21 +29,24 @@ class Token(object):
 
     def __call__(self) -> dict:
         timestamp = str(time.time())
-        message = f'{timestamp}GET/users/self/verify'
-        return {
-            'signature': self.signature(message),
-            'key': self.__key,
-            'passphrase': self.__passphrase,
-            'timestamp': timestamp
-        }
+        signature = self.signature(timestamp)
+        return self.header(timestamp, signature)
 
-    def signature(self, message: str) -> bytes:
+    def signature(self, timestamp: str) -> bytes:
         key = base64.b64decode(self.__secret)
-        msg = message.encode('ascii')
+        msg = f'{timestamp}GET/users/self/verify'.encode('ascii')
         sig = hmac.new(key, msg, hashlib.sha256)
         digest = sig.digest()
         b64signature = base64.b64encode(digest)
         return b64signature.decode('utf-8')
+
+    def header(self, timestamp: str, signature: bytes) -> dict:
+        return {
+            'signature': signature,
+            'key': self.__key,
+            'passphrase': self.__passphrase,
+            'timestamp': timestamp
+        }
 
 
 class Stream(object):
@@ -56,10 +59,10 @@ class Stream(object):
 
     @property
     def connected(self) -> bool:
-        return False if self.socket is None else self.socket.connected
+        return False if not self.socket else self.socket.connected
 
     def connect(self) -> bool:
-        header = None if self.auth is None else self.auth()
+        header = None if not self.auth else self.auth()
         websocket.enableTrace(self.trace)
         self.socket = websocket.create_connection(url=self.url, header=header)
         return self.connected
