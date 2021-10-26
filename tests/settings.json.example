@@ -1,0 +1,14 @@
+{
+    "sandbox": {
+        "uri": "https://api-public.sandbox.pro.coinbase.com",
+        "key": "",
+        "secret": "",
+        "passphrase": ""
+    },
+    "restapi": {
+        "uri": "https://api.pro.coinbase.com",
+        "key": "",
+        "secret": "",
+        "passphrase": ""
+    }
+}

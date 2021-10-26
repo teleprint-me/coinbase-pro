@@ -1,0 +1,17 @@
+os: linux
+dist: bionic
+language: python
+cache: pip
+
+python: 
+  - 3.6
+  - 3.7
+  - 3.8
+  - 3.9
+  - 3.10
+
+install:
+  - pip install .[test]
+
+script:
+  - python -m pytest tests/

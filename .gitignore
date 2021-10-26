@@ -2,6 +2,7 @@
 main.py
 test.py
 settings.ini
+settings.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
