@@ -18,22 +18,20 @@ from coinbase_pro import __source__
 from coinbase_pro import __version__
 from coinbase_pro import __limit__
 
-from coinbase_pro import Response
-
 from coinbase_pro.abstract import AbstractAPI
 from coinbase_pro.abstract import AbstractAuth
 from coinbase_pro.abstract import AbstractMessenger
 from coinbase_pro.abstract import AbstractSubscriber
 
-from requests import Session
+from dataclasses import dataclass
 
+from requests import Session
+from requests import Response
 from requests.auth import AuthBase
 from requests.models import PreparedRequest
 
 from time import time
 from time import sleep
-
-from dataclasses import dataclass
 
 import base64
 import hmac
@@ -69,8 +67,8 @@ class Auth(AbstractAuth, AuthBase):
         timestamp = str(time())
         body = str() if not request.body else request.body.decode('utf-8')
         message = f'{timestamp}{request.method.upper()}{request.path_url}{body}'
-        headers = self.headers(timestamp, message)
-        request.headers.update(headers)
+        header = self.header(timestamp, message)
+        request.headers.update(header)
         return request
 
     def signature(self, message: str) -> bytes:
@@ -81,7 +79,7 @@ class Auth(AbstractAuth, AuthBase):
         b64signature = base64.b64encode(digest)
         return b64signature.decode('utf-8')
 
-    def headers(self, timestamp: str, message: str) -> dict:
+    def header(self, timestamp: str, message: str) -> dict:
         return {
             'Content-Type': 'application/json',
             'User-Agent': f'{__agent__}/{__version__} {__source__}',
@@ -150,7 +148,7 @@ class Messenger(AbstractMessenger):
             timeout=self.timeout
         )
 
-    def page(self, endpoint: str, data: dict = None) -> Response:
+    def page(self, endpoint: str, data: dict = None) -> list:
         responses = []
         if not data:
             data = {'limit': 20}

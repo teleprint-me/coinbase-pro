@@ -13,14 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import requests
-import typing
-
 __agent__: str = 'coinbase-pro'
 __source__: str = 'https://github.com/teleprint-me/coinbase-pro'
-__version__: str = '1.1.4'
+__version__: str = '2.0.0'
 __limit__: float = 1 / 3.5
-
-List = typing.TypeVar('List', list, list[dict])
-Dict = typing.TypeVar('Dict', dict, List)
-Response = typing.TypeVar('Response', requests.Response, list[requests.Response])

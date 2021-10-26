@@ -1,5 +1,3 @@
-# Coinbase Pro
-
 [![Build Status](https://app.travis-ci.com/teleprint-me/coinbase-pro.svg?branch=main)](https://travis-ci.com/teleprint-me/coinbase-pro)
 
 ```

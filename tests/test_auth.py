@@ -14,7 +14,7 @@ def test_auth(auth: Auth):
     assert hasattr(auth, '_Auth__secret')
     assert hasattr(auth, '_Auth__passphrase')
     assert hasattr(auth, 'signature')
-    assert hasattr(auth, 'headers')
+    assert hasattr(auth, 'header')
 
     assert isinstance(auth._Auth__key, str)
     assert isinstance(auth._Auth__secret, str)
@@ -22,7 +22,7 @@ def test_auth(auth: Auth):
 
     assert callable(auth)
     assert callable(auth.signature)
-    assert callable(auth.headers)
+    assert callable(auth.header)
 
 
 @pytest.mark.private

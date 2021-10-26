@@ -13,34 +13,35 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from coinbase_pro import Response
+from abc import ABC
+from abc import abstractproperty
+from abc import abstractmethod
 
+from requests import Response
+from requests import Session
 from requests.models import PreparedRequest
 
-import abc
-import requests
 
-
-class AbstractAPI(abc.ABC):
-    @abc.abstractproperty
+class AbstractAPI(ABC):
+    @abstractproperty
     def version(self) -> int:
         pass
 
-    @abc.abstractproperty
+    @abstractproperty
     def url(self) -> str:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def endpoint(self, value: str) -> str:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def path(self, value: str) -> str:
         pass
 
 
-class AbstractAuth(abc.ABC):
-    @abc.abstractmethod
+class AbstractAuth(ABC):
+    @abstractmethod
     def __init__(self,
                  key: str = None,
                  secret: str = None,
@@ -48,80 +49,80 @@ class AbstractAuth(abc.ABC):
 
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def signature(self, message: str) -> bytes:
         pass
 
-    @abc.abstractmethod
-    def headers(self, timestamp: str, message: str) -> dict:
+    @abstractmethod
+    def header(self, timestamp: str, message: str) -> dict:
         pass
 
 
-class AbstractMessenger(abc.ABC):
-    @abc.abstractmethod
+class AbstractMessenger(ABC):
+    @abstractmethod
     def __init__(self, api: AbstractAPI = None, auth: AbstractAuth = None):
         pass
 
-    @abc.abstractproperty
+    @abstractproperty
     def api(self) -> AbstractAPI:
         pass
 
-    @abc.abstractproperty
+    @abstractproperty
     def auth(self) -> AbstractAuth:
         pass
 
-    @abc.abstractproperty
-    def session(self) -> requests.Session:
+    @abstractproperty
+    def session(self) -> Session:
         pass
 
-    @abc.abstractproperty
+    @abstractproperty
     def timeout(self) -> int:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def get(self, endpoint: str, data: dict = None) -> Response:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def post(self, endpoint: str, data: dict = None) -> Response:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def put(self, endpoint: str, data: dict = None) -> Response:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def delete(self, endpoint: str, data: dict = None) -> Response:
         pass
 
-    @abc.abstractmethod
-    def page(self, endpoint: str, data: dict = None) -> Response:
+    @abstractmethod
+    def page(self, endpoint: str, data: dict = None) -> list:
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def close(self) -> None:
         pass
 
 
-class AbstractSubscriber(abc.ABC):
-    @abc.abstractmethod
+class AbstractSubscriber(ABC):
+    @abstractmethod
     def __init__(self, messenger: AbstractMessenger):
         pass
 
-    @abc.abstractproperty
+    @abstractproperty
     def messenger(self) -> AbstractMessenger:
         pass
 
-    @abc.abstractmethod
-    def error(self, response: requests.Response) -> bool:
+    @abstractmethod
+    def error(self, response: Response) -> bool:
         pass
 
 
-class AbstractClient(abc.ABC):
-    @abc.abstractmethod
+class AbstractClient(ABC):
+    @abstractmethod
     def __init__(self, messenger: AbstractMessenger):
         pass
