@@ -32,32 +32,30 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope='module')
 def settings() -> dict:
     data = dict()
-    with open('settings.json', 'r') as file:
+    with open('tests/settings.json.example', 'r') as file:
         data = json.load(file)
     return data
 
 
 @pytest.fixture(scope='module')
 def api(settings: dict) -> API:
-    return API(settings['sandbox']['uri'])
+    return API(settings['uri']['sandbox'])
 
 
 @pytest.fixture(scope='module')
-def api_key(settings: dict) -> tuple:
+def auth(settings: dict) -> Auth:
     key = settings['sandbox']['key']
     secret = settings['sandbox']['secret']
     passphrase = settings['sandbox']['passphrase']
-    return key, secret, passphrase
+    return Auth(key, secret, passphrase)
 
 
 @pytest.fixture(scope='module')
-def auth(api_key: tuple) -> Auth:
-    return Auth(*api_key)
-
-
-@pytest.fixture(scope='module')
-def token(api_key: tuple) -> Token:
-    return Token(*api_key)
+def token(settings: dict) -> Token:
+    key = settings['restapi']['key']
+    secret = settings['restapi']['secret']
+    passphrase = settings['restapi']['passphrase']
+    return Token(key, secret, passphrase)
 
 
 @pytest.fixture(scope='module')

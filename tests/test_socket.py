@@ -33,8 +33,8 @@ def test_token(token: Token):
     assert callable(token.header)
 
 
-def test_public_stream(public_stream: Stream):
-    assert 'wss://ws-feed.pro.coinbase.com' == public_stream.url
+def test_public_stream(settings: dict, public_stream: Stream):
+    assert settings['uri']['websocket'] == public_stream.url
 
     message: dict = get_message()
 

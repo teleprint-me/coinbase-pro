@@ -1,12 +1,15 @@
 {
+    "uri": {
+        "sandbox": "https://api-public.sandbox.pro.coinbase.com",
+        "restapi": "https://api.pro.coinbase.com",
+        "websocket": "wss://ws-feed.pro.coinbase.com"
+    },
     "sandbox": {
-        "uri": "https://api-public.sandbox.pro.coinbase.com",
         "key": "",
         "secret": "",
         "passphrase": ""
     },
     "restapi": {
-        "uri": "https://api.pro.coinbase.com",
         "key": "",
         "secret": "",
         "passphrase": ""
