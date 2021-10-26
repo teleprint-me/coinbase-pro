@@ -18,7 +18,7 @@ import typing
 
 __agent__: str = 'coinbase-pro'
 __source__: str = 'https://github.com/teleprint-me/coinbase-pro'
-__version__: str = '1.1.1'
+__version__: str = '1.1.2'
 __limit__: float = 1 / 3.5
 
 List = typing.TypeVar('List', list, list[dict])
