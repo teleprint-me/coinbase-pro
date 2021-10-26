@@ -1,4 +1,4 @@
-# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -13,12 +13,27 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+from dataclasses import dataclass
+
+from websocket import enableTrace
+from websocket import create_connection
+from websocket import WebSocket
+
+from time import time
+from time import sleep
+
 import base64
 import hashlib
 import hmac
 import json
-import time
-import websocket
+
+
+def get_message() -> dict:
+    return {
+        'type': 'subscribe',
+        'product_ids': ['BTC-USD'],
+        'channels': ['ticker']
+    }
 
 
 class Token(object):
@@ -28,7 +43,7 @@ class Token(object):
         self.__passphrase = passphrase
 
     def __call__(self) -> dict:
-        timestamp = str(time.time())
+        timestamp = str(time())
         signature = self.signature(timestamp)
         return self.header(timestamp, signature)
 
@@ -49,13 +64,13 @@ class Token(object):
         }
 
 
+@dataclass
 class Stream(object):
-    def __init__(self, auth: Token = None, url: str = None, trace: bool = False):
-        self.auth: Token = auth
-        self.url: str = url if url else 'wss://ws-feed.pro.coinbase.com'
-        self.trace: bool = trace
-        self.timeout: int = 30
-        self.socket: websocket.WebSocket = None
+    auth: Token = None
+    url: str = 'wss://ws-feed.pro.coinbase.com'
+    trace: bool = False
+    timeout: int = 30
+    socket: WebSocket = None
 
     @property
     def connected(self) -> bool:
@@ -63,8 +78,11 @@ class Stream(object):
 
     def connect(self) -> bool:
         header = None if not self.auth else self.auth()
-        websocket.enableTrace(self.trace)
-        self.socket = websocket.create_connection(url=self.url, header=header)
+        enableTrace(self.trace)
+        if header:
+            self.socket = create_connection(url=self.url, header=header)
+        else:
+            self.socket = create_connection(url=self.url)
         return self.connected
 
     def send(self, message: dict) -> None:
@@ -81,26 +99,15 @@ class Stream(object):
     def ping(self) -> None:
         payload = 'keepalive'
         while self.connected:
-            if self.trace:
-                print(f'[Ping] {payload} [Timeout] {self.timeout}s')
-            self.socket.ping(payload)
-            time.sleep(self.timeout)
+            try:
+                if self.trace:
+                    print(f'[Ping] {payload} [Timeout] {self.timeout}s')
+                self.socket.ping(payload)
+                sleep(self.timeout)
+            except (KeyboardInterrupt,):
+                break
 
     def disconnect(self) -> bool:
         if self.connected:
             self.socket.close()
         return not self.connected
-
-
-def get_default_message() -> dict:
-    return {
-        'type': 'subscribe',
-        'product_ids': ['BTC-USD'],
-        'channels': ['ticker']
-    }
-
-
-def get_message(value: dict = None) -> dict:
-    if value is None:
-        return get_default_message()
-    return value

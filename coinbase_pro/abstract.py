@@ -1,4 +1,4 @@
-# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -63,7 +63,7 @@ class AbstractAuth(abc.ABC):
 
 class AbstractMessenger(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, auth: AbstractAuth = None):
+    def __init__(self, api: AbstractAPI = None, auth: AbstractAuth = None):
         pass
 
     @abc.abstractproperty

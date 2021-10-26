@@ -1,4 +1,4 @@
-# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,8 @@
 from coinbase_pro import __agent__
 from coinbase_pro import __source__
 from coinbase_pro import __version__
-from coinbase_pro import __timeout__
+from coinbase_pro import __limit__
+
 from coinbase_pro import Response
 
 from coinbase_pro.abstract import AbstractAPI
@@ -24,34 +25,28 @@ from coinbase_pro.abstract import AbstractAuth
 from coinbase_pro.abstract import AbstractMessenger
 from coinbase_pro.abstract import AbstractSubscriber
 
+from requests import Session
+
 from requests.auth import AuthBase
 from requests.models import PreparedRequest
 
+from time import time
+from time import sleep
+
+from dataclasses import dataclass
+
 import base64
-import dataclasses
 import hmac
 import hashlib
-import requests
-import time
 
 
-@dataclasses.dataclass
+@dataclass
 class API(AbstractAPI):
-    # NOTE: https://github.com/teleprint-me/ledger-api/discussions/7
-    __version: int = 1
-    __url: str = 'https://api.pro.coinbase.com'
+    url: str = 'https://api.pro.coinbase.com'
 
     @property
     def version(self) -> int:
-        return self.__version
-
-    @property
-    def url(self) -> str:
-        return self.__url
-
-    @url.setter
-    def url(self, value: str):
-        self.__url = value
+        return 1
 
     def endpoint(self, value: str) -> str:
         return f'/{value.lstrip("/")}'
@@ -71,7 +66,7 @@ class Auth(AbstractAuth, AuthBase):
         self.__passphrase = passphrase if passphrase else ''
 
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
-        timestamp = str(time.time())
+        timestamp = str(time())
         body = str() if not request.body else request.body.decode('utf-8')
         message = f'{timestamp}{request.method.upper()}{request.path_url}{body}'
         headers = self.headers(timestamp, message)
@@ -98,30 +93,29 @@ class Auth(AbstractAuth, AuthBase):
 
 
 class Messenger(AbstractMessenger):
-    def __init__(self, auth: AbstractAuth = None):
+    def __init__(self, api: AbstractAPI = None, auth: AbstractAuth = None):
+        self.__api: AbstractAPI = api if api else API()
         self.__auth: AbstractAuth = auth
-        self.__api: AbstractAPI = API()
-        self.__session: requests.Session = requests.Session()
-        self.__timeout: int = 30
-
-    @property
-    def auth(self) -> AbstractAuth:
-        return self.__auth
+        self.__session: Session = Session()
 
     @property
     def api(self) -> AbstractAPI:
         return self.__api
 
     @property
-    def timeout(self) -> int:
-        return self.__timeout
+    def auth(self) -> AbstractAuth:
+        return self.__auth
 
     @property
-    def session(self) -> requests.Session:
+    def session(self) -> Session:
         return self.__session
 
+    @property
+    def timeout(self) -> int:
+        return 30
+
     def get(self, endpoint: str, data: dict = None) -> Response:
-        time.sleep(__timeout__)
+        sleep(__limit__)
         return self.session.get(
             self.api.path(endpoint),
             params=data,
@@ -130,7 +124,7 @@ class Messenger(AbstractMessenger):
         )
 
     def post(self, endpoint: str, data: dict = None) -> Response:
-        time.sleep(__timeout__)
+        sleep(__limit__)
         return self.session.post(
             self.api.path(endpoint),
             json=data,
@@ -139,7 +133,7 @@ class Messenger(AbstractMessenger):
         )
 
     def put(self, endpoint: str, data: dict = None) -> Response:
-        time.sleep(__timeout__)
+        sleep(__limit__)
         return self.session.put(
             self.api.path(endpoint),
             json=data,
@@ -148,7 +142,7 @@ class Messenger(AbstractMessenger):
         )
 
     def delete(self, endpoint: str, data: dict = None) -> Response:
-        time.sleep(__timeout__)
+        sleep(__limit__)
         return self.session.delete(
             self.api.path(endpoint),
             json=data,
@@ -159,7 +153,7 @@ class Messenger(AbstractMessenger):
     def page(self, endpoint: str, data: dict = None) -> Response:
         responses = []
         if not data:
-            data = {}
+            data = {'limit': 20}
         while True:
             response = self.get(endpoint, data)
             if 200 != response.status_code:
@@ -184,5 +178,5 @@ class Subscriber(AbstractSubscriber):
     def messenger(self) -> AbstractMessenger:
         return self.__messenger
 
-    def error(self, response: requests.Response) -> bool:
+    def error(self, response: Response) -> bool:
         return 200 != response.status_code

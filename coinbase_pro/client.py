@@ -1,4 +1,4 @@
-# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -119,7 +119,7 @@ class Order(Subscriber):
 
 class Oracle(Subscriber):
     def prices(self) -> Dict:
-        return self.messenger.get('/oracle')
+        return self.messenger.get('/oracle').json()
 
 
 class Product(Subscriber):

@@ -1,4 +1,4 @@
-# coinbase-pro - A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@ import typing
 
 __agent__: str = 'coinbase-pro'
 __source__: str = 'https://github.com/teleprint-me/coinbase-pro'
-__version__: str = '1.0.9'
-__timeout__: float = 1 / 3.5
+__version__: str = '1.1.0'
+__limit__: float = 1 / 3.5
 
 List = typing.TypeVar('List', list, list[dict])
 Dict = typing.TypeVar('Dict', dict, List)

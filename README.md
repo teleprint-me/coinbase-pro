@@ -10,7 +10,7 @@
 
 ## About
 
-- A python requests wrapper for Coinbase Pro and Coinbase Exchange REST API
+- A Python Wrapper for Coinbase Pro and Coinbase Exchange
 
 - [Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
 
