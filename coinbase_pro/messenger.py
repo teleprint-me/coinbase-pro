@@ -1,4 +1,4 @@
-# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
+# coinbase-pro - A Python Wrapper for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -40,28 +40,44 @@ import hashlib
 
 @dataclass
 class API(AbstractAPI):
-    url: str = 'https://api.pro.coinbase.com'
+    def __init__(self, settings: dict = None):
+        self.__settings = settings if settings else {
+            'key': '',
+            'secret': '',
+            'passphrase': '',
+            'authority': 'https://api.pro.coinbase.com'
+        }
+
+    @property
+    def key(self) -> str:
+        return self.__settings['key']
+
+    @property
+    def secret(self) -> str:
+        return self.__settings['secret']
+
+    @property
+    def passphrase(self) -> str:
+        return self.__settings['passphrase']
+
+    @property
+    def authority(self) -> str:
+        return self.__settings['authority']
 
     @property
     def version(self) -> int:
         return 1
 
-    def endpoint(self, value: str) -> str:
+    def path(self, value: str) -> str:
         return f'/{value.lstrip("/")}'
 
-    def path(self, value: str) -> str:
-        return f'{self.url}/{self.endpoint(value).lstrip("/")}'
+    def url(self, value: str) -> str:
+        return f'{self.authority}/{self.path(value).lstrip("/")}'
 
 
 class Auth(AbstractAuth, AuthBase):
-    def __init__(self,
-                 key: str = None,
-                 secret: str = None,
-                 passphrase: str = None):
-
-        self.__key = key if key else ''
-        self.__secret = secret if secret else ''
-        self.__passphrase = passphrase if passphrase else ''
+    def __init__(self, api: API = None):
+        self.__api = api if api else API()
 
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
         timestamp = str(time())
@@ -71,8 +87,12 @@ class Auth(AbstractAuth, AuthBase):
         request.headers.update(header)
         return request
 
+    @property
+    def api(self) -> API:
+        return self.__api
+
     def signature(self, message: str) -> bytes:
-        key = base64.b64decode(self.__secret)
+        key = base64.b64decode(self.api.secret)
         msg = message.encode('ascii')
         sig = hmac.new(key, msg, hashlib.sha256)
         digest = sig.digest()
@@ -84,25 +104,24 @@ class Auth(AbstractAuth, AuthBase):
             'Content-Type': 'application/json',
             'User-Agent': f'{__agent__}/{__version__} {__source__}',
             'CB-ACCESS-TIMESTAMP': timestamp,
-            'CB-ACCESS-KEY': self.__key,
+            'CB-ACCESS-KEY': self.api.key,
             'CB-ACCESS-SIGN': self.signature(message),
-            'CB-ACCESS-PASSPHRASE': self.__passphrase
+            'CB-ACCESS-PASSPHRASE': self.api.passphrase
         }
 
 
 class Messenger(AbstractMessenger):
-    def __init__(self, api: AbstractAPI = None, auth: AbstractAuth = None):
-        self.__api: AbstractAPI = api if api else API()
-        self.__auth: AbstractAuth = auth
+    def __init__(self, auth: AbstractAuth = None):
+        self.__auth: AbstractAuth = auth if auth else Auth()
         self.__session: Session = Session()
-
-    @property
-    def api(self) -> AbstractAPI:
-        return self.__api
 
     @property
     def auth(self) -> AbstractAuth:
         return self.__auth
+
+    @property
+    def api(self) -> AbstractAPI:
+        return self.__auth.api
 
     @property
     def session(self) -> Session:
@@ -112,48 +131,48 @@ class Messenger(AbstractMessenger):
     def timeout(self) -> int:
         return 30
 
-    def get(self, endpoint: str, data: dict = None) -> Response:
+    def get(self, path: str, data: dict = None) -> Response:
         sleep(__limit__)
         return self.session.get(
-            self.api.path(endpoint),
+            self.api.url(path),
             params=data,
             auth=self.auth,
             timeout=self.timeout
         )
 
-    def post(self, endpoint: str, data: dict = None) -> Response:
+    def post(self, path: str, data: dict = None) -> Response:
         sleep(__limit__)
         return self.session.post(
-            self.api.path(endpoint),
+            self.api.url(path),
             json=data,
             auth=self.auth,
             timeout=self.timeout
         )
 
-    def put(self, endpoint: str, data: dict = None) -> Response:
+    def put(self, path: str, data: dict = None) -> Response:
         sleep(__limit__)
         return self.session.put(
-            self.api.path(endpoint),
+            self.api.url(path),
             json=data,
             auth=self.auth,
             timeout=self.timeout
         )
 
-    def delete(self, endpoint: str, data: dict = None) -> Response:
+    def delete(self, path: str, data: dict = None) -> Response:
         sleep(__limit__)
         return self.session.delete(
-            self.api.path(endpoint),
+            self.api.url(path),
             json=data,
             auth=self.auth,
             timeout=self.timeout
         )
 
-    def page(self, endpoint: str, data: dict = None) -> list:
+    def page(self, path: str, data: dict = None) -> list:
         responses = []
         if not data:
             data = {'limit': 20}
         while True:
-            response = self.get(endpoint, data)
+            response = self.get(path, data)
             if 200 != response.status_code:
                 return [response]
             if not response.json():

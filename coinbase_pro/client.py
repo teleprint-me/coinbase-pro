@@ -215,26 +215,9 @@ class Client(AbstractClient):
         return 'coinbase_pro'
 
 
-def get_messenger(key: str = None,
-                  secret: str = None,
-                  passphrase: str = None,
-                  url: str = None) -> Messenger:
-
-    auth = None
-    if not url:
-        api = API()
-    else:
-        api = API(url)
-    if key and secret and passphrase:
-        auth = Auth(key, secret, passphrase)
-    if auth:
-        return Messenger(api, auth)
-    return Messenger(api)
+def get_messenger(settings: dict = None) -> Messenger:
+    return Messenger(Auth(API(settings)))
 
 
-def get_client(key: str = None,
-               secret: str = None,
-               passphrase: str = None,
-               url: str = None) -> Client:
-
-    return Client(get_messenger(key, secret, passphrase, url))
+def get_client(settings: dict = None) -> Client:
+    return Client(Messenger(Auth(API(settings))))

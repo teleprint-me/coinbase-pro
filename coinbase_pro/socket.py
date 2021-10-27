@@ -20,7 +20,6 @@ from websocket import create_connection
 from websocket import WebSocket
 
 from time import time
-from time import sleep
 
 import base64
 import hashlib
@@ -28,27 +27,52 @@ import hmac
 import json
 
 
-def get_message() -> dict:
-    return {
-        'type': 'subscribe',
-        'product_ids': ['BTC-USD'],
-        'channels': ['ticker']
-    }
+@dataclass
+class WSS(object):
+    def __init__(self, settings: dict = None):
+        self.__settings = settings if settings else {
+            'key': '',
+            'secret': '',
+            'passphrase': '',
+            'authority': 'wss://ws-feed.pro.coinbase.com'
+        }
+
+    @property
+    def key(self) -> str:
+        return self.__settings['key']
+
+    @property
+    def secret(self) -> str:
+        return self.__settings['secret']
+
+    @property
+    def passphrase(self) -> str:
+        return self.__settings['passphrase']
+
+    @property
+    def url(self) -> str:
+        return self.__settings['authority']
+
+    @property
+    def version(self) -> int:
+        return 1
 
 
 class Token(object):
-    def __init__(self, key: str, secret: str, passphrase: str):
-        self.__key = key
-        self.__secret = secret
-        self.__passphrase = passphrase
+    def __init__(self, wss: WSS = None):
+        self.__wss = wss if wss else WSS()
 
     def __call__(self) -> dict:
         timestamp = str(time())
         signature = self.signature(timestamp)
         return self.header(timestamp, signature)
 
+    @property
+    def wss(self) -> WSS:
+        return self.__wss
+
     def signature(self, timestamp: str) -> bytes:
-        key = base64.b64decode(self.__secret)
+        key = base64.b64decode(self.wss.secret)
         msg = f'{timestamp}GET/users/self/verify'.encode('ascii')
         sig = hmac.new(key, msg, hashlib.sha256)
         digest = sig.digest()
@@ -58,31 +82,40 @@ class Token(object):
     def header(self, timestamp: str, signature: bytes) -> dict:
         return {
             'signature': signature,
-            'key': self.__key,
-            'passphrase': self.__passphrase,
+            'key': self.wss.key,
+            'passphrase': self.wss.passphrase,
             'timestamp': timestamp
         }
 
 
-@dataclass
 class Stream(object):
-    auth: Token = None
-    url: str = 'wss://ws-feed.pro.coinbase.com'
-    trace: bool = False
-    timeout: int = 30
-    socket: WebSocket = None
+    def __init__(self, token: Token = None):
+        self.__token: Token = token if token else Token()
+        self.__wss: WSS = self.__token.wss
+        self.socket: WebSocket = None
+
+    @property
+    def token(self) -> Token:
+        return self.__token
+
+    @property
+    def wss(self) -> WSS:
+        return self.__wss
+
+    @property
+    def auth(self) -> bool:
+        return self.wss.key and self.wss.secret and self.wss.passphrase
 
     @property
     def connected(self) -> bool:
         return False if not self.socket else self.socket.connected
 
-    def connect(self) -> bool:
-        header = None if not self.auth else self.auth()
-        enableTrace(self.trace)
-        if header:
-            self.socket = create_connection(url=self.url, header=header)
+    def connect(self, trace: bool = False) -> bool:
+        enableTrace(trace)
+        if self.auth:
+            self.socket = create_connection(url=self.wss.url, header=self.token())
         else:
-            self.socket = create_connection(url=self.url)
+            self.socket = create_connection(url=self.wss.url)
         return self.connected
 
     def send(self, message: dict) -> None:
@@ -96,18 +129,19 @@ class Stream(object):
                 return json.loads(payload)
         return dict()
 
-    def ping(self) -> None:
-        payload = 'keepalive'
-        while self.connected:
-            try:
-                if self.trace:
-                    print(f'[Ping] {payload} [Timeout] {self.timeout}s')
-                self.socket.ping(payload)
-                sleep(self.timeout)
-            except (KeyboardInterrupt,):
-                break
-
     def disconnect(self) -> bool:
         if self.connected:
             self.socket.close()
         return not self.connected
+
+
+def get_message() -> dict:
+    return {
+        'type': 'subscribe',
+        'product_ids': ['BTC-USD'],
+        'channels': ['ticker']
+    }
+
+
+def get_stream(settings: dict = None) -> Stream:
+    return Stream(Token(WSS(settings)))

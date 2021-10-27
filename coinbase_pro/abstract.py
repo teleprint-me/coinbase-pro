@@ -1,4 +1,4 @@
-# coinbase-pro - A Python API Adapter for Coinbase Pro and Coinbase Exchange
+# coinbase-pro - A Python Wrapper for Coinbase Pro and Coinbase Exchange
 # Copyright (C) 2021 teleprint.me
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,34 +23,50 @@ from requests.models import PreparedRequest
 
 
 class AbstractAPI(ABC):
+    @abstractmethod
+    def __init__(self, settings: dict = None):
+        pass
+
+    @abstractproperty
+    def key(self) -> str:
+        pass
+
+    @abstractproperty
+    def secret(self) -> str:
+        pass
+
+    @abstractproperty
+    def passphrase(self) -> str:
+        pass
+
+    @abstractproperty
+    def authority(self) -> str:
+        pass
+
     @abstractproperty
     def version(self) -> int:
-        pass
-
-    @abstractproperty
-    def url(self) -> str:
-        pass
-
-    @abstractmethod
-    def endpoint(self, value: str) -> str:
         pass
 
     @abstractmethod
     def path(self, value: str) -> str:
         pass
 
+    @abstractmethod
+    def url(self, value: str) -> str:
+        pass
+
 
 class AbstractAuth(ABC):
     @abstractmethod
-    def __init__(self,
-                 key: str = None,
-                 secret: str = None,
-                 passphrase: str = None):
-
+    def __init__(self, api: AbstractAPI):
         pass
 
     @abstractmethod
     def __call__(self, request: PreparedRequest) -> PreparedRequest:
+        pass
+
+    @abstractproperty
+    def api(self) -> AbstractAPI:
         pass
 
     @abstractmethod
@@ -64,7 +80,7 @@ class AbstractAuth(ABC):
 
 class AbstractMessenger(ABC):
     @abstractmethod
-    def __init__(self, api: AbstractAPI = None, auth: AbstractAuth = None):
+    def __init__(self, auth: AbstractAuth = None):
         pass
 
     @abstractproperty
@@ -84,23 +100,23 @@ class AbstractMessenger(ABC):
         pass
 
     @abstractmethod
-    def get(self, endpoint: str, data: dict = None) -> Response:
+    def get(self, path: str, data: dict = None) -> Response:
         pass
 
     @abstractmethod
-    def post(self, endpoint: str, data: dict = None) -> Response:
+    def post(self, path: str, data: dict = None) -> Response:
         pass
 
     @abstractmethod
-    def put(self, endpoint: str, data: dict = None) -> Response:
+    def put(self, path: str, data: dict = None) -> Response:
         pass
 
     @abstractmethod
-    def delete(self, endpoint: str, data: dict = None) -> Response:
+    def delete(self, path: str, data: dict = None) -> Response:
         pass
 
     @abstractmethod
-    def page(self, endpoint: str, data: dict = None) -> list:
+    def page(self, path: str, data: dict = None) -> list:
         pass
 
     @abstractmethod
@@ -115,10 +131,6 @@ class AbstractSubscriber(ABC):
 
     @abstractproperty
     def messenger(self) -> AbstractMessenger:
-        pass
-
-    @abstractmethod
-    def error(self, response: Response) -> bool:
         pass
 
 
