@@ -76,18 +76,6 @@ class TestPublicProduct(Teardown):
         assert 'sequence' in response
         assert 'asks' in response
         assert 'bids' in response
-        if level in (None, 1):
-            asks = len(response['asks']) == 1
-            bids = len(response['bids']) == 1
-            assert asks or bids
-        if level == 2:
-            asks = len(response['asks']) <= 250
-            bids = len(response['bids']) <= 250
-            assert asks or bids
-        if level == 3:
-            asks = len(response['asks']) > 250
-            bids = len(response['bids']) > 250
-            assert asks or bids
 
     def test_ticker(self, public_client):
         response = public_client.product.ticker('BTC-USD')

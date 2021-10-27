@@ -1,8 +1,11 @@
 from coinbase_pro.messenger import API
 from coinbase_pro.messenger import Auth
 from coinbase_pro.messenger import Messenger
+
+from coinbase_pro.socket import WSS
 from coinbase_pro.socket import Token
 from coinbase_pro.socket import Stream
+
 from coinbase_pro.client import Client
 
 import pytest
@@ -32,40 +35,41 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope='module')
 def settings() -> dict:
     data = dict()
-    with open('tests/settings.json.example', 'r') as file:
+    with open('settings.json', 'r') as file:
         data = json.load(file)
     return data
 
 
 @pytest.fixture(scope='module')
 def api(settings: dict) -> API:
-    return API(settings['uri']['sandbox'])
+    return API(settings['sandbox'])
 
 
 @pytest.fixture(scope='module')
-def auth(settings: dict) -> Auth:
-    key = settings['sandbox']['key']
-    secret = settings['sandbox']['secret']
-    passphrase = settings['sandbox']['passphrase']
-    return Auth(key, secret, passphrase)
+def wss(settings: dict) -> WSS:
+    restapi = settings['restapi']
+    restapi['authority'] = settings['websocket']['authority']
+    return WSS(restapi)
 
 
 @pytest.fixture(scope='module')
-def token(settings: dict) -> Token:
-    key = settings['restapi']['key']
-    secret = settings['restapi']['secret']
-    passphrase = settings['restapi']['passphrase']
-    return Token(key, secret, passphrase)
+def auth(api: API) -> Auth:
+    return Auth(api)
 
 
 @pytest.fixture(scope='module')
-def public_messenger(api: API) -> Messenger:
-    return Messenger(api)
+def token(wss: WSS) -> Token:
+    return Token(wss)
 
 
 @pytest.fixture(scope='module')
-def private_messenger(api: API, auth: Auth) -> Messenger:
-    return Messenger(api, auth)
+def public_messenger() -> Messenger:
+    return Messenger()
+
+
+@pytest.fixture(scope='module')
+def private_messenger(auth: Auth) -> Messenger:
+    return Messenger(auth)
 
 
 @pytest.fixture(scope='module')

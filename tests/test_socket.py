@@ -1,3 +1,4 @@
+from coinbase_pro.socket import WSS
 from coinbase_pro.socket import Token
 from coinbase_pro.socket import Stream
 from coinbase_pro.socket import get_message
@@ -17,25 +18,39 @@ def test_message():
     assert message['channels'] == ['ticker']
 
 
+def test_wss(wss: WSS):
+    assert hasattr(wss, 'key')
+    assert hasattr(wss, 'secret')
+    assert hasattr(wss, 'passphrase')
+    assert hasattr(wss, 'url')
+    assert hasattr(wss, 'version')
+
+    assert isinstance(wss.key, str)
+    assert isinstance(wss.secret, str)
+    assert isinstance(wss.passphrase, str)
+    assert isinstance(wss.url, str)
+    assert isinstance(wss.version, int)
+
+    assert 'ws-feed' in wss.url
+
+
 def test_token(token: Token):
-    assert hasattr(token, '_Token__key')
-    assert hasattr(token, '_Token__secret')
-    assert hasattr(token, '_Token__passphrase')
+    assert hasattr(token, '_Token__wss')
+    assert hasattr(token, 'wss')
     assert hasattr(token, 'signature')
     assert hasattr(token, 'header')
 
-    assert isinstance(token._Token__key, str)
-    assert isinstance(token._Token__secret, str)
-    assert isinstance(token._Token__passphrase, str)
+    assert isinstance(token.wss.key, str)
+    assert isinstance(token.wss.secret, str)
+    assert isinstance(token.wss.passphrase, str)
+    assert isinstance(token.wss.url, str)
 
     assert callable(token)
     assert callable(token.signature)
     assert callable(token.header)
 
 
-def test_public_stream(settings: dict, public_stream: Stream):
-    assert settings['uri']['websocket'] == public_stream.url
-
+def test_public_stream(public_stream: Stream):
     message: dict = get_message()
 
     assert public_stream.connect() is True
@@ -54,9 +69,7 @@ def test_public_stream(settings: dict, public_stream: Stream):
 
 
 @pytest.mark.private
-def test_private_stream(token: Token, private_stream: Stream):
-    assert 'wss://ws-feed.pro.coinbase.com' == private_stream.url
-
+def test_private_stream(private_stream: Stream):
     message: dict = get_message()
 
     private_stream.connect()

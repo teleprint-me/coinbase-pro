@@ -1,6 +1,5 @@
 from coinbase_pro.abstract import AbstractAuth
 
-from coinbase_pro.messenger import API
 from coinbase_pro.messenger import Auth
 
 import pytest
@@ -10,15 +9,14 @@ import requests
 def test_auth(auth: Auth):
     assert isinstance(auth, AbstractAuth)
 
-    assert hasattr(auth, '_Auth__key')
-    assert hasattr(auth, '_Auth__secret')
-    assert hasattr(auth, '_Auth__passphrase')
+    assert hasattr(auth, '_Auth__api')
+    assert hasattr(auth, 'api')
     assert hasattr(auth, 'signature')
     assert hasattr(auth, 'header')
 
-    assert isinstance(auth._Auth__key, str)
-    assert isinstance(auth._Auth__secret, str)
-    assert isinstance(auth._Auth__passphrase, str)
+    assert isinstance(auth.api.key, str)
+    assert isinstance(auth.api.secret, str)
+    assert isinstance(auth.api.passphrase, str)
 
     assert callable(auth)
     assert callable(auth.signature)
@@ -26,10 +24,7 @@ def test_auth(auth: Auth):
 
 
 @pytest.mark.private
-def test_auth_request(api: API, auth: Auth):
-    assert 'sandbox' in api.url
-
-    url = api.path('/accounts')
-    response = requests.get(url, auth=auth, timeout=30)
-
+def test_auth_request(auth: Auth):
+    assert 'sandbox' in auth.api.authority
+    response = requests.get(auth.api.url('/accounts'), auth=auth, timeout=30)
     assert response.status_code == 200

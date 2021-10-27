@@ -14,14 +14,12 @@ import pytest
 
 
 class TestMessenger(Teardown):
-    @pytest.mark.private
     def test_messenger_attributes(self, private_messenger):
-        assert hasattr(private_messenger, 'api')
         assert hasattr(private_messenger, 'auth')
+        assert hasattr(private_messenger, 'api')
         assert hasattr(private_messenger, 'session')
         assert hasattr(private_messenger, 'timeout')
 
-    @pytest.mark.private
     def test_messenger_methods(self, private_messenger):
         assert callable(private_messenger.get)
         assert callable(private_messenger.post)
@@ -29,7 +27,6 @@ class TestMessenger(Teardown):
         assert callable(private_messenger.delete)
         assert callable(private_messenger.page)
 
-    @pytest.mark.private
     def test_messenger_instance(self, private_messenger):
         assert isinstance(private_messenger, AbstractMessenger)
         assert isinstance(private_messenger.api, API)
