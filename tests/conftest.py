@@ -35,7 +35,7 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope='module')
 def settings() -> dict:
     data = dict()
-    with open('settings.json', 'r') as file:
+    with open('tests/settings.json.example', 'r') as file:
         data = json.load(file)
     return data
 
