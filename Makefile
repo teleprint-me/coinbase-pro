@@ -21,4 +21,4 @@ uninstall:
 	pip uninstall coinbase-pro
 
 clean:
-	rm -rfv .pytest_cache/ dist/ coinbase_pro.egg-info/ coinbase_pro/__pycache__
+	rm -rfv .pytest_cache/ dist/ coinbase_pro.egg-info/ coinbase_pro/__pycache__ tests/__pycache__

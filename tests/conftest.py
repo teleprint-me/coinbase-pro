@@ -10,6 +10,7 @@ from coinbase_pro.client import Client
 
 import pytest
 import json
+import os
 
 
 def pytest_addoption(parser):
@@ -35,8 +36,15 @@ def pytest_collection_modifyitems(config, items):
 @pytest.fixture(scope='module')
 def settings() -> dict:
     data = dict()
-    with open('tests/settings.json.example', 'r') as file:
+
+    if os.path.exists('settings.json'):
+        filepath = 'settings.json'
+    else:
+        filepath = 'tests/settings.json.example'
+
+    with open(filepath, 'r') as file:
         data = json.load(file)
+
     return data
 
 
