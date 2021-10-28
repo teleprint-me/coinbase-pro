@@ -2,27 +2,86 @@
 
 ## About
 
-The `coinbase_pro.socket` module is a `websocket-client` wrapper. It simplifies websocket connections made to the WSS API by handling the nuances for you.
+The `coinbase_pro.socket` module is a `websocket-client` adapter. 
+
+It simplifies websocket connections made to the WSS API by handling the nuances for you.
 
 
 ## Import
 
 ```python
+from coinbase_pro.socket import WSS
 from coinbase_pro.socket import Token
 from coinbase_pro.socket import Stream
+from coinbase_pro.socket import get_message
+from coinbase_pro.socket import get_stream
 ```
+
+## WSS
+
+```python
+WSS(settings: dict = None)
+```
+
+- The WSS class defines the WSS API URI path utilized by Stream.
+
+### WSS.key
+
+```python
+WSS.key -> str
+```
+
+- A read-only property representing the given Key.
+
+### WSS.secret
+
+```python
+WSS.secret -> str
+```
+
+- A read-only property representing the given Secret.
+
+### WSS.passphrase
+
+```python
+WSS.passphrase -> str
+```
+
+- A read-only property representing the given Passphrase.
+
+### WSS.url
+
+```python
+WSS.url -> str
+```
+
+- A read-only property that returns the root domain being used.
+- This property defaults to wss://ws-feed.pro.coinbase.com
+
+### WSS.verison
+
+```python
+WSS.version -> int
+```
+
+- A read-only property that returns the WSS API Version number.
 
 ## Token
 
 ```python
-Token(key: str, secret: str, passphrase: str)
+Token(wss: WSS)
+```
+- Create a Auth Token for receiving account related realtime data.
+
+### Token.wss
+
+```python
+Token.wss -> WSS
 ```
 
-- Create a Auth Token for receiving realtime account related information.
+- A read-only property that returns a WSS instance object.
 
-_Note: Auth `Token` is not required to create a `Stream` instance._
-
-### Token.\_\_call\_\_
+### Token.\_\_call__
 
 ```python
 Token.__call__() -> dict
@@ -33,20 +92,59 @@ Token.__call__() -> dict
 ### Token.signature
 
 ```python
-Token.signature(message: str) -> bytes
+Token.signature(timestamp: str) -> bytes
 ```
 
-- Sign the given message and return the signed message as a `bytes` instance
+- A method that returns a signed message.
+
+### Token.header
+
+```python
+Token.header(timestamp: str, signature: bytes) -> dict
+```
+
+- A method that returns a signed header.
 
 ## Stream
 
 ```python
-Stream(auth: Token = none, url: str = None, trace: bool = False)
+Stream(token: Token = none)
 ```
 
-- The `Stream` class defines the `websocket-client` adapter.
+- The Stream class defines the websocket-client adapter.
 
-_Note: Stream.url defaults to wss://ws-feed.pro.coinbase.com._
+
+### Stream.token
+
+```python
+Stream.token -> Token
+```
+
+- A read-only property that returns a Token instance object.
+
+### Stream.wss
+
+```python
+Stream.wss -> WSS
+```
+
+- A read-only property that returns a WSS instance object.
+
+### Stream.socket
+
+```python
+Stream.socket -> WebSocket
+```
+
+- A read-write property that returns a WebSocket instance object.
+
+### Stream.auth
+
+```python
+Stream.auth -> bool
+```
+
+- A read-only property that returns `True` if `WSS.key`, `WSS.secret`, and `WSS.passphrase` are set else `False`.
 
 ### Stream.connected
 
@@ -54,12 +152,12 @@ _Note: Stream.url defaults to wss://ws-feed.pro.coinbase.com._
 Stream.connected -> bool
 ```
 
-- A read-only property that returns `True` if the `websocket` is connected else `False`
+- A read-only property that returns `True` if `Stream.socket` is connected else `False`
 
 ### Stream.connect
 
 ```python
-Stream.connect -> bool
+Stream.connect(trace: bool = False) -> bool
 ```
 
 - A method that creates a `websocket` connection and returns `True` on success else `False` on failure.
@@ -82,36 +180,26 @@ Stream.receive() -> dict
 
 _Note: You'll want to poll this method while you have an active connection._
 
-### Stream.ping
-
-```python
-Stream.ping() -> None
-```
-
-- A method that keeps the connection alive.
-
-_Note: This method blocks and should not be polled._
-
 ### Stream.disconnect
 
 ```python
 Stream.disconnect() -> bool
 ```
 
-- A method that disconnects from the WSS Feed and returns `True` if the connection is closed, else `False`.
-
-## get_default_message
-
-```python
-get_default_message() -> dict
-```
-
-- Get the default message for websocket initialization
+- A method that disconnects from the WSS Feed and returns `True` on success else `False` on failure.
 
 ## get_message
 
 ```python
-get_message(value: dict = None) -> dict
+get_message() -> dict
 ```
 
-- Get the default message for websocket initialization or return the given value as message
+- Get the default message for websocket initialization.
+
+## get_stream
+
+```python
+get_stream(settings: dict = None) -> dict
+```
+
+- A function that returns a Stream instance object based on the given `settings` argument.

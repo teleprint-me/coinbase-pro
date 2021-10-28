@@ -20,44 +20,35 @@ Then copy the settings example provided in the tests dir
 
 ```sh
 cp tests/settings.json.example settings.json
+```
 
 Add both your Sandbox and REST API keys to the settings file
 
 ```json
 {
-    "uri": {
-        "sandbox": "https://api-public.sandbox.pro.coinbase.com",
-        "restapi": "https://api.pro.coinbase.com",
-        "websocket": "wss://ws-feed.pro.coinbase.com"
-    },
     "sandbox": {
-        "key": "sandbox_key",
-        "secret": "sandbox_secret",
-        "passphrase": "sandbox_passphrase"
+        "key": "",
+        "secret": "",
+        "passphrase": "",
+        "authority": "https://api-public.sandbox.pro.coinbase.com"
     },
     "restapi": {
-        "key": "restapi_key",
-        "secret": "restapi_secret",
-        "passphrase": "restapi_passphrase"
+        "key": "",
+        "secret": "",
+        "passphrase": "",
+        "authority": "https://api.pro.coinbase.com"
+    },
+    "websocket": {
+        "authority": "wss://ws-feed.pro.coinbase.com"
     }
 }
 ```
 
-Then edit the settings function in the tests/conftest.py file
 
-```python
-32 @pytest.fixture(scope='module')
-33 def settings() -> dict:
-34    data = dict()
-# change line 35 from
-35    with open('tests/settings.json.example', 'r') as file:
-# to
-35    with open('settings.json', 'r') as file:
-```
-
-Now you can run tests locally. 
-
-The `.gitignore` file is set to ignore `main.py`, `settings.json`, and `settings.ini`.
+- The `.gitignore` file is set to ignore `main.py`, `settings.json`, and `settings.ini`.
+- If a `settings.json` file does not exist, then the test suite will default to the `tests/settings.json.example` file.
+- If a `settings.json` file does exist, then the test suite will use that file instead.
+- You can run tests locally once you have configured your `settings.json` file. 
 
 ## Run modular tests
 
