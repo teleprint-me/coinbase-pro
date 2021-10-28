@@ -208,9 +208,134 @@ Transfer.withdraw_to(data: dict = None) -> dict
 
 - Withdraws funds from the specified profile_id to a linked external payment method.
 
+## Fee
+
+### Fee.get
+
+```python
+Fee.get() -> dict
+```
+
+- Get fees rates and 30 days trailing volume.
+
 ## Order
+
+### Order.fills
+
+```python
+Order.fills() -> dict
+```
+
+- Get a list of fills. A fill is a partial or complete match on a specific order.
+
+### Order.list
+
+```python
+Order.list(data: dict) -> list
+```
+
+- List your current open orders.
+
+### Order.cancel_all
+
+```python
+Order.cancel_all(data: dict = None) -> list
+```
+
+- With best effort, cancel all open orders.
+
+### Order.post
+
+```python
+Order.post(data: dict) -> dict
+```
+
+- Create an order. You can place two types of orders: limit and market.
+
+### Order.get
+
+```python
+Order.get(order_id: str) -> dict
+```
+
+- Get a single order by `id`.
+
+### Order.cancel
+
+```python
+Order.cancel(order_id: str, data: dict = None) -> str
+```
+
+- Cancel a single open order by `{id}`.
+
 ## Oracle
+
+### Oracle.prices
+
+```python
+Oracle.prices() -> dict
+```
+
+- Get cryptographically signed prices ready to be posted on-chain using Compound's Open Oracle smart contract.
+
 ## Product
+
+### Product.list
+
+```python
+Product.list() -> list
+```
+
+- Gets a list of available currency pairs for trading.
+
+### Product.get
+
+```python
+Product.get() -> dict
+```
+
+- Get information on a single product.
+
+### Product.book
+
+```python
+Product.book() -> dict
+```
+
+- Get a list of open orders for a product.
+
+### Product.ticker
+
+```python
+Product.ticker() -> dict
+```
+
+- Gets snapshot information about the last trade (tick), best bid/ask and 24h volume.
+
+### Product.trades
+
+```python
+Product.trades() -> list
+```
+
+- Gets a list the latest trades for a product.
+
+### Product.candles
+
+```python
+Product.candles() -> list
+```
+
+- Historic rates for a product.
+
+### Product.stats
+
+```python
+Product.stats() -> dict
+```
+
+- Gets 30day and 24hour stats for a product.
+
 ## Profile
 ## Report
 ## User
@@ -267,6 +392,14 @@ Client.transfer -> Transfer
 ```
 
 - A property that returns the `Transfer` instance object.
+
+### Client.fee
+
+```python
+Client.fee -> Fee
+```
+
+- A property that returns the `Fee` instance object.
 
 ### Client.order
 
@@ -327,9 +460,7 @@ Client.time -> Time
 ## get_messenger
 
 ```python
-get_messenger(key: str = None,
-              secret: str = None,
-              passphrase: str = None) -> Messenger
+get_messenger(settings: dict = None) -> Messenger
 ```
 
 - Return a `Messenger` a instance object.
@@ -337,6 +468,7 @@ get_messenger(key: str = None,
 ## get_client
 
 ```python
+get_messenger(settings: dict = None) -> Messenger
 get_client(key: str = None,
            secret: str = None,
            passphrase: str = None) -> Client
