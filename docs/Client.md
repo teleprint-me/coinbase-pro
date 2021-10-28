@@ -468,10 +468,7 @@ get_messenger(settings: dict = None) -> Messenger
 ## get_client
 
 ```python
-get_messenger(settings: dict = None) -> Messenger
-get_client(key: str = None,
-           secret: str = None,
-           passphrase: str = None) -> Client
+get_client(settings: dict = None) -> Client
 ```
 
 - Return a `Client` a instance object.
