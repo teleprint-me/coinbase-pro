@@ -10,16 +10,20 @@
 
 ## About
 - Another Unofficial Python Wrapper for Coinbase Pro 
-  - Features
-    - [x] Coinbase Pro 
-    - [x] Coinbase Exchange
-    - [x] Full REST API with Plugins
-    - [x] Basic WSS API for WebSockets
-    - [x] Full test suite using `pytest`
-- [Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
-  - [x] Complete Quickstart Guide for the impatient coder
-  - [ ] Full Python Wrapper API Documentation `[In Progress]`
-  - [ ] Install the coinbase-pro library and learn how it works `[In Progress] [Bug]`
+
+## Documentation
+- [Read The Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
+
+## Tasklist
+- [x] Coinbase Pro 
+- [x] Coinbase Exchange
+- [x] REST API 
+- [x] WSS API
+- [ ] Plugins `[In Progress]`
+- [x] Test Suite `[Using pytest]`
+- [ ] Install `[In Progress] [Bug]`
+- [x] Quickstart Guide
+- [ ] API Documentation `[In Progress]`
 
 ## Tips
 - Bitcoin (Segwit): 397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt
