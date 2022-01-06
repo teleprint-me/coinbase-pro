@@ -26,20 +26,19 @@ Add both your Sandbox and REST API keys to the settings file
 
 ```json
 {
-    "sandbox": {
+    "box": {
         "key": "",
         "secret": "",
         "passphrase": "",
-        "authority": "https://api-public.sandbox.pro.coinbase.com"
+        "rest": "https://api-public.sandbox.pro.coinbase.com",
+        "feed": "wss://ws-feed.pro.coinbase.com"
     },
-    "restapi": {
+    "api": {
         "key": "",
         "secret": "",
         "passphrase": "",
-        "authority": "https://api.pro.coinbase.com"
-    },
-    "websocket": {
-        "authority": "wss://ws-feed.pro.coinbase.com"
+        "rest": "https://api.pro.coinbase.com",
+        "feed": "wss://ws-feed.pro.coinbase.com"
     }
 }
 ```
