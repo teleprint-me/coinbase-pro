@@ -493,7 +493,7 @@ We should get the same result as before when we execute the sample code.
 
 ## Subscriber and CoinbasePro.plug
 
-The `Subscriber` and `CoinbasePro` class allow you to create your own extensible classes. If we find there is not a class or method that supports a particular pattern or solution, then we can create out own instead and easily attach it to a `client` instance.
+The `Subscriber` and `CoinbasePro` classes allow you to create your own extensible classes. If we find there is not a class or method that supports a particular pattern or solution, then we can create out own instead and easily attach it to a `client` instance.
 
 ```python
 #!/usr/bin/env python
@@ -520,10 +520,30 @@ class History(Subscriber):
 
 
 client = get_client(get_settings("settings.json")["box"])
-client.plug("history", History(client.messenger))
+client.plug(History, "history")
 responses = client.history.list_({"product_id": "BTC-USD", "limit": 25})
 print("[History]")
 pprint(responses[0][0])
+```
+
+Expected Output
+
+```sh
+$ python cbot
+[History]
+{'created_at': '2022-01-06T20:16:07.397858Z',
+ 'fee': '0.4849978179585000',
+ 'liquidity': 'T',
+ 'order_id': '7319a3a3-2f2c-452f-9792-2d78fc5969fb',
+ 'price': '44185.71000000',
+ 'product_id': 'BTC-USD',
+ 'profile_id': 'fcada388-d6f6-47fe-8826-5afbceaf197c',
+ 'settled': True,
+ 'side': 'buy',
+ 'size': '0.00219527',
+ 'trade_id': 37319261,
+ 'usd_volume': '96.9995635917000000',
+ 'user_id': '5ee38d9688d076112365883f'}
 ```
 
 _Note: The `CoinbasePro.plug` method is currently experimental and should improve over time. Changes should be expected as the methods implementation is improved._

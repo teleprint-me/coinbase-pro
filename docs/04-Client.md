@@ -541,10 +541,12 @@ A property that returns the client label.
 ### CoinbasePro.plug
 
 ```python
-CoinbasePro.plug(name: str, value: object)
+CoinbasePro.plug(cls: object, name: str)
 ```
 
 A method used to attach 3rd party classes to extend the clients functionality.
+
+_Note: This method is experimental and is subject to change._
 
 ## get_messenger
 

@@ -213,8 +213,9 @@ class CoinbasePro(AbstractClient):
     def name(self):
         return "coinbase_pro"
 
-    def plug(self, name: str, value: object):
-        setattr(self, name, value)
+    def plug(self, cls: object, name: str):
+        instance = cls(self.messenger)
+        setattr(self, name, instance)
 
 
 def get_messenger(settings: dict = None) -> Messenger:
