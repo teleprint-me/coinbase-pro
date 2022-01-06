@@ -2,8 +2,8 @@ env:
 	virtualenv venv
 	source venv/bin/activate
 
-test:
-	pip install pytest dateutils
+setup:
+	pip install -r requirements.txt
 
 test_public:
 	pytest -x
