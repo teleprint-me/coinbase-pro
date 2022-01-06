@@ -13,20 +13,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from abc import ABC
-from abc import abstractproperty
-from abc import abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 
-from requests import Response
-from requests import Session
+from requests import Response, Session
 from requests.models import PreparedRequest
 
 
 class AbstractAPI(ABC):
-    @abstractmethod
-    def __init__(self, settings: dict = None):
-        pass
-
     @abstractproperty
     def key(self) -> str:
         pass
@@ -40,7 +33,11 @@ class AbstractAPI(ABC):
         pass
 
     @abstractproperty
-    def authority(self) -> str:
+    def rest(self) -> str:
+        pass
+
+    @abstractproperty
+    def feed(self) -> str:
         pass
 
     @abstractproperty
@@ -137,4 +134,104 @@ class AbstractSubscriber(ABC):
 class AbstractClient(ABC):
     @abstractmethod
     def __init__(self, messenger: AbstractMessenger):
+        pass
+
+    def __repr__(self) -> str:
+        pass
+
+    def __str__(self) -> str:
+        pass
+
+    @abstractproperty
+    def name(self) -> str:
+        pass
+
+    @abstractmethod
+    def plug(self, name: str, value: object):
+        pass
+
+
+class AbstractWSS(ABC):
+    @abstractproperty
+    def key(self) -> str:
+        pass
+
+    @abstractproperty
+    def secret(self) -> str:
+        pass
+
+    @abstractproperty
+    def passphrase(self) -> str:
+        pass
+
+    @abstractproperty
+    def rest(self) -> str:
+        pass
+
+    @abstractproperty
+    def feed(self) -> str:
+        pass
+
+    @abstractproperty
+    def version(self) -> int:
+        pass
+
+    @abstractmethod
+    def url(self) -> str:
+        pass
+
+
+class AbstractToken(ABC):
+    @abstractmethod
+    def __init__(self, wss: AbstractWSS):
+        pass
+
+    @abstractmethod
+    def __call__(self) -> dict:
+        pass
+
+    @abstractproperty
+    def wss(self) -> AbstractWSS:
+        pass
+
+    @abstractmethod
+    def signature(self, timestamp: str) -> bytes:
+        pass
+
+    @abstractmethod
+    def header(self, timestamp: str, signature: bytes) -> dict:
+        pass
+
+
+class AbstractStream(ABC):
+    @abstractmethod
+    def __init__(self, token: AbstractToken):
+        pass
+
+    @abstractproperty
+    def wss(self) -> AbstractWSS:
+        pass
+
+    @abstractproperty
+    def token(self) -> AbstractToken:
+        pass
+
+    @abstractproperty
+    def auth(self) -> bool:
+        pass
+
+    @abstractproperty
+    def connected(self) -> bool:
+        pass
+
+    def connect(self, trace: bool = False) -> bool:
+        pass
+
+    def send(self, message: dict):
+        pass
+
+    def receive(self) -> dict:
+        pass
+
+    def disconnect(self) -> bool:
         pass
