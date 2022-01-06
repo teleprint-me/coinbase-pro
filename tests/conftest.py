@@ -1,16 +1,10 @@
-from coinbase_pro.messenger import API
-from coinbase_pro.messenger import Auth
-from coinbase_pro.messenger import Messenger
-
-from coinbase_pro.socket import WSS
-from coinbase_pro.socket import Token
-from coinbase_pro.socket import Stream
-
-from coinbase_pro.client import Client
-
-import pytest
 import json
 import os
+
+import pytest
+from coinbase_pro.client import CoinbasePro
+from coinbase_pro.messenger import API, Auth, Messenger
+from coinbase_pro.socket import WSS, Stream, Token
 
 
 def pytest_addoption(parser):
@@ -33,82 +27,80 @@ def pytest_collection_modifyitems(config, items):
             item.add_marker(private)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def settings() -> dict:
     data = dict()
 
-    if os.path.exists('settings.json'):
-        filepath = 'settings.json'
+    if os.path.exists("settings.json"):
+        filepath = "settings.json"
     else:
-        filepath = 'tests/settings.json.example'
+        filepath = "tests/settings.json.example"
 
-    with open(filepath, 'r') as file:
+    with open(filepath, "r") as file:
         data = json.load(file)
 
     return data
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def api(settings: dict) -> API:
-    return API(settings['sandbox'])
+    return API(settings["box"])
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def wss(settings: dict) -> WSS:
-    restapi = settings['restapi']
-    restapi['authority'] = settings['websocket']['authority']
-    return WSS(restapi)
+    return WSS(settings["api"])
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def auth(api: API) -> Auth:
     return Auth(api)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def token(wss: WSS) -> Token:
     return Token(wss)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def public_messenger() -> Messenger:
     return Messenger()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def private_messenger(auth: Auth) -> Messenger:
     return Messenger(auth)
 
 
-@pytest.fixture(scope='module')
-def public_client(public_messenger: Messenger) -> Client:
-    return Client(public_messenger)
+@pytest.fixture(scope="module")
+def public_client(public_messenger: Messenger) -> CoinbasePro:
+    return CoinbasePro(public_messenger)
 
 
-@pytest.fixture(scope='module')
-def private_client(private_messenger: Messenger) -> Client:
-    return Client(private_messenger)
+@pytest.fixture(scope="module")
+def private_client(private_messenger: Messenger) -> CoinbasePro:
+    return CoinbasePro(private_messenger)
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def public_stream() -> Stream:
     return Stream()
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope="module")
 def private_stream(token: Token) -> Stream:
     return Stream(token)
 
 
-@pytest.fixture(scope='module')
-def account_id(private_client: Client) -> str:
+@pytest.fixture(scope="module")
+def account_id(private_client: CoinbasePro) -> str:
     accounts = private_client.account.list()
-    account = [a for a in accounts if a['currency'] == 'BTC']
-    return account[0]['id']
+    account = [a for a in accounts if a["currency"] == "BTC"]
+    return account[0]["id"]
 
 
-@pytest.fixture(scope='module')
-def conversion_id(private_client: Client) -> str:
-    data = {'from': 'USD', 'to': 'USDC', 'amount': 10.0}
+@pytest.fixture(scope="module")
+def conversion_id(private_client: CoinbasePro) -> str:
+    data = {"from": "USD", "to": "USDC", "amount": 10.0}
     conversion = private_client.convert.post(data)
-    return conversion['id']
+    return conversion["id"]

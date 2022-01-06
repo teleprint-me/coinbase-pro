@@ -1,39 +1,44 @@
 # abstract
+import pytest
 from coinbase_pro.abstract import AbstractClient
+
+# private
+from coinbase_pro.client import (
+    Account,
+    Coinbase,
+    CoinbasePro,
+    Convert,
+    Oracle,
+    Order,
+    Profile,
+    Report,
+    Transfer,
+    User,
+)
+
 # core
 from coinbase_pro.messenger import Subscriber
-# private
-from coinbase_pro.client import Account
-from coinbase_pro.client import Coinbase
-from coinbase_pro.client import Convert
-from coinbase_pro.client import Transfer
-from coinbase_pro.client import Order
-from coinbase_pro.client import Oracle
-from coinbase_pro.client import Profile
-from coinbase_pro.client import Report
-from coinbase_pro.client import User
-from coinbase_pro.client import Client
+
 # custom
 from tests.teardown import Teardown
-import pytest
 
 
 @pytest.mark.private
 class TestPrivateClient(object):
     def test_private_instance(self, private_client):
         assert isinstance(private_client, AbstractClient)
-        assert isinstance(private_client, Client)
+        assert isinstance(private_client, CoinbasePro)
 
     def test_private_attributes(self, private_client):
-        assert hasattr(private_client, 'account')
-        assert hasattr(private_client, 'coinbase')
-        assert hasattr(private_client, 'convert')
-        assert hasattr(private_client, 'transfer')
-        assert hasattr(private_client, 'order')
-        assert hasattr(private_client, 'oracle')
-        assert hasattr(private_client, 'profile')
-        assert hasattr(private_client, 'report')
-        assert hasattr(private_client, 'user')
+        assert hasattr(private_client, "account")
+        assert hasattr(private_client, "coinbase")
+        assert hasattr(private_client, "convert")
+        assert hasattr(private_client, "transfer")
+        assert hasattr(private_client, "order")
+        assert hasattr(private_client, "oracle")
+        assert hasattr(private_client, "profile")
+        assert hasattr(private_client, "report")
+        assert hasattr(private_client, "user")
 
     def test_private_account(self, private_client):
         account = private_client.account
@@ -121,38 +126,38 @@ class TestPrivateAccount(Teardown):
     def test_list(self, private_client):
         response = private_client.account.list()
         assert isinstance(response, list)
-        assert 'currency' in response[0]
+        assert "currency" in response[0]
 
     def test_get(self, private_client, account_id):
         response = private_client.account.get(account_id)
         assert isinstance(response, dict)
-        assert 'currency' in response
+        assert "currency" in response
 
     def test_holds(self, private_client, account_id):
         response = private_client.account.holds(account_id)
         assert isinstance(response, list)
         if len(response) > 0:
             assert isinstance(response[0], dict)
-            assert 'amount' in response[0]
-            assert 'type' in response[0]
-            assert 'ref' in response[0]
+            assert "amount" in response[0]
+            assert "type" in response[0]
+            assert "ref" in response[0]
 
     def test_ledger(self, private_client, account_id):
         response = private_client.account.ledger(account_id)
         assert isinstance(response, list)
         if len(response) > 0:
             assert isinstance(response[0], dict)
-            assert 'amount' in response[0]
-            assert 'details' in response[0]
+            assert "amount" in response[0]
+            assert "details" in response[0]
 
     def test_transfers(self, private_client, account_id):
         response = private_client.account.transfers(account_id)
         assert isinstance(response, list)
         if len(response) > 0:
             assert isinstance(response[0], dict)
-            assert 'type' in response[0]
-            assert 'created_at' in response[0]
-            assert 'details' in response[0]
+            assert "type" in response[0]
+            assert "created_at" in response[0]
+            assert "details" in response[0]
 
 
 @pytest.mark.private
@@ -162,9 +167,9 @@ class TestPrivateCoinbase(Teardown):
         assert isinstance(response, list)
         if len(response) > 0:
             assert isinstance(response[0], dict)
-            assert 'available_on_consumer' in response[0]
-            assert 'balance' in response[0]
-            assert 'currency' in response[0]
+            assert "available_on_consumer" in response[0]
+            assert "balance" in response[0]
+            assert "currency" in response[0]
 
     @pytest.mark.skip
     def test_generate_address(self, private_client):
@@ -188,17 +193,17 @@ class TestPrivateCoinbase(Teardown):
 @pytest.mark.private
 class TestPrivateConvert(Teardown):
     def test_post(self, private_client):
-        data = {'from': 'USD', 'to': 'USDC', 'amount': 10.0}
+        data = {"from": "USD", "to": "USDC", "amount": 10.0}
         response = private_client.convert.post(data)
         assert isinstance(response, dict)
-        assert 'from' in response and response['from'] == 'USD'
-        assert 'to' in response and response['to'] == 'USDC'
+        assert "from" in response and response["from"] == "USD"
+        assert "to" in response and response["to"] == "USDC"
 
     def test_get(self, private_client, conversion_id):
         response = private_client.convert.get(conversion_id)
         assert isinstance(response, dict)
-        assert 'from_account_id' in response
-        assert 'to_account_id' in response
+        assert "from_account_id" in response
+        assert "to_account_id" in response
 
 
 @pytest.mark.private
@@ -223,91 +228,89 @@ class TestPrivateTransfer(Teardown):
 @pytest.mark.private
 class TestPrivateOrder(Teardown):
     def test_post_limit_order(self, private_client):
-        response = private_client.order.post({
-            'side': 'buy',
-            'product_id': 'BTC-USD',
-            'type': 'limit',
-            'price': 40000.0,
-            'size': 0.001
-        })
+        response = private_client.order.post(
+            {
+                "side": "buy",
+                "product_id": "BTC-USD",
+                "type": "limit",
+                "price": 40000.0,
+                "size": 0.001,
+            }
+        )
         assert isinstance(response, dict)
-        assert 'status' in response
-        assert response['type'] == 'limit'
+        assert "status" in response
+        assert response["type"] == "limit"
 
     def test_post_market_order(self, private_client):
-        response = private_client.order.post({
-            'side': 'buy',
-            'product_id': 'BTC-USD',
-            'type': 'market',
-            'size': 0.001
-        })
+        response = private_client.order.post(
+            {"side": "buy", "product_id": "BTC-USD", "type": "market", "size": 0.001}
+        )
         assert isinstance(response, dict)
-        assert 'status' in response
-        assert response['type'] == 'market'
+        assert "status" in response
+        assert response["type"] == "market"
 
-    @pytest.mark.parametrize('stop', ['entry', 'loss'])
+    @pytest.mark.parametrize("stop", ["entry", "loss"])
     def test_post_stop_order(self, private_client, stop):
-        response = private_client.order.post({
-            'side': 'buy',
-            'product_id': 'BTC-USD',
-            'type': 'limit',
-            'price': 50000.0,
-            'size': 0.01,
-            'stop': stop,
-            'stop_price': 40000.0
-        })
+        response = private_client.order.post(
+            {
+                "side": "buy",
+                "product_id": "BTC-USD",
+                "type": "limit",
+                "price": 50000.0,
+                "size": 0.01,
+                "stop": stop,
+                "stop_price": 40000.0,
+            }
+        )
         print(response)
         assert isinstance(response, dict)
-        assert response['type'] == 'limit'
-        assert response['stop'] == stop
+        assert response["type"] == "limit"
+        assert response["stop"] == stop
 
     def test_cancel(self, private_client):
-        order = private_client.order.post({
-            'side': 'buy',
-            'product_id': 'BTC-USD',
-            'type': 'limit',
-            'price': 40000.0,
-            'size': 0.001
-        })
-        response = private_client.order.cancel(
-            order['id'],
-            {'product_id': 'BTC-USD'}
+        order = private_client.order.post(
+            {
+                "side": "buy",
+                "product_id": "BTC-USD",
+                "type": "limit",
+                "price": 40000.0,
+                "size": 0.001,
+            }
         )
+        response = private_client.order.cancel(order["id"], {"product_id": "BTC-USD"})
         assert isinstance(response, str)
-        assert response == order['id']
+        assert response == order["id"]
 
     def test_list(self, private_client):
-        response = private_client.order.list({
-            'status': 'pending',
-            'product_id': 'BTC-USD'
-        })
+        response = private_client.order.list(
+            {"status": "pending", "product_id": "BTC-USD"}
+        )
         assert isinstance(response, list)
         if len(response) > 0:
-            assert 'created_at' in response[0]
+            assert "created_at" in response[0]
 
     def test_get(self, private_client):
-        order = private_client.order.post({
-            'side': 'buy',
-            'product_id': 'BTC-USD',
-            'type': 'limit',
-            'price': 40000.0,
-            'size': 0.01
-        })
-        response = private_client.order.get(order['id'])
-        assert response['id'] == order['id']
+        order = private_client.order.post(
+            {
+                "side": "buy",
+                "product_id": "BTC-USD",
+                "type": "limit",
+                "price": 40000.0,
+                "size": 0.01,
+            }
+        )
+        response = private_client.order.get(order["id"])
+        assert response["id"] == order["id"]
 
     def test_fills(self, private_client):
-        response = private_client.order.fills({
-            'product_id': 'BTC-USD',
-            'limit': 20
-        })
+        response = private_client.order.fills({"product_id": "BTC-USD", "limit": 20})
         assert isinstance(response, list)
         assert isinstance(response[0], dict)
-        assert 'product_id' in response[0]
-        assert 'order_id' in response[0]
-        assert 'price' in response[0]
-        assert 'size' in response[0]
-        assert 'created_at' in response[0]
+        assert "product_id" in response[0]
+        assert "order_id" in response[0]
+        assert "price" in response[0]
+        assert "size" in response[0]
+        assert "created_at" in response[0]
 
 
 @pytest.mark.private
@@ -315,9 +318,9 @@ class TestPrivateOracle(Teardown):
     def test_prices(self, private_client):
         response = private_client.oracle.prices()
         assert isinstance(response, dict)
-        assert 'messages' in response
-        assert 'prices' in response
-        assert 'signatures' in response
+        assert "messages" in response
+        assert "prices" in response
+        assert "signatures" in response
 
 
 @pytest.mark.skip
