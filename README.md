@@ -9,17 +9,12 @@
 ```
 
 ## About
-
-- A Python Wrapper for Coinbase Pro and Coinbase Exchange
-
+- Another Unofficial Python Wrapper for Coinbase Pro 
+  - Supports Coinbase Exchange
 - [Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
-
-    Install the coinbase-pro library and learn how it works
+  - Install the coinbase-pro library and learn how it works
 
 ## Tips
-
 - Bitcoin (Segwit): 397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt
-
 - Ethereum: 0x7be933221135468b9886632771fF289341144C3a
-
 - Litecoin (Segwit): MBh6cTL6bHcLQSyWzyHG9FcVCDemoWQzTo

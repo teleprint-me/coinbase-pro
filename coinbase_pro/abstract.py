@@ -55,7 +55,7 @@ class AbstractAPI(ABC):
 
 class AbstractAuth(ABC):
     @abstractmethod
-    def __init__(self, api: AbstractAPI):
+    def __init__(self, api: AbstractAPI = None):
         pass
 
     @abstractmethod
@@ -183,7 +183,7 @@ class AbstractWSS(ABC):
 
 class AbstractToken(ABC):
     @abstractmethod
-    def __init__(self, wss: AbstractWSS):
+    def __init__(self, wss: AbstractWSS = None):
         pass
 
     @abstractmethod
@@ -205,7 +205,7 @@ class AbstractToken(ABC):
 
 class AbstractStream(ABC):
     @abstractmethod
-    def __init__(self, token: AbstractToken):
+    def __init__(self, token: AbstractToken = None):
         pass
 
     @abstractproperty

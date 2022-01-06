@@ -49,10 +49,19 @@ WSS.passphrase -> str
 
 - A read-only property representing the given Passphrase.
 
-### WSS.url
+### WSS.rest
 
 ```python
-WSS.url -> str
+WSS.rest -> str
+```
+
+- A read-only property that returns the root domain being used.
+- This property defaults to https://api.pro.coinbase.com
+
+### WSS.feed
+
+```python
+WSS.feed -> str
 ```
 
 - A read-only property that returns the root domain being used.
@@ -66,20 +75,21 @@ WSS.version -> int
 
 - A read-only property that returns the WSS API Version number.
 
+### WSS.url
+
+```python
+WSS.url -> str
+```
+
+- A read-only property that returns the root domain being used.
+- This property defaults to WSS.feed
+
 ## Token
 
 ```python
-Token(wss: WSS)
+Token(wss: WSS = None)
 ```
 - Create a Auth Token for receiving account related realtime data.
-
-### Token.wss
-
-```python
-Token.wss -> WSS
-```
-
-- A read-only property that returns a WSS instance object.
 
 ### Token.\_\_call__
 
@@ -88,6 +98,14 @@ Token.__call__() -> dict
 ```
 
 - Return authentication information to be injected into the message during `websocket` initialization.
+
+### Token.wss
+
+```python
+Token.wss -> WSS
+```
+
+- A read-only property that returns a WSS instance object.
 
 ### Token.signature
 
@@ -108,7 +126,7 @@ Token.header(timestamp: str, signature: bytes) -> dict
 ## Stream
 
 ```python
-Stream(token: Token = none)
+Stream(token: Token = None)
 ```
 
 - The Stream class defines the websocket-client adapter.

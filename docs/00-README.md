@@ -2,12 +2,13 @@
 
 ## Contents
 
-- 0x00 README.md
-- 0x01 Quickstart.md
-- 0x02 Abstract.md
-- 0x03 Messenger.md
-- 0x04 Client.md
-- 0x05 Socket.md
+- 00-README.md
+- 01-Quickstart.md
+- 02-Abstract.md
+- 03-Messenger.md
+- 04-Client.md
+- 05-Socket.md
+- 06-Tests.md
 
 ## Install
 
@@ -23,6 +24,27 @@ pip install --user git+https://github.com/teleprint-me/coinbase-pro.git#egg=coin
 pip install git+https://github.com/teleprint-me/coinbase-pro.git#egg=coinbase-pro
 ```
 
+### Development
+
+```sh
+git clone git@github.com:teleprint-me/coinbase-pro.git
+cd coinbase-pro
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+touch main.py
+cp tests/settings.json.example settings.json
+pytest -x            # run public tests
+pytest -x --private  # run public and private tests
+```
+
+- Use `flake8` for linting
+- Use `black` for formatting
+- Use `pytest` for testing
+- Use `make` for building
+- Use `git` for Branches, Tags, and Pull Requests
+- Add your handle to Contributors.md
+
 ## Notes
 
 - This library is intentionally minimalistic
@@ -31,19 +53,19 @@ pip install git+https://github.com/teleprint-me/coinbase-pro.git#egg=coinbase-pr
 
 ## Issues
 
-- If you find a bug or error, then you should open an issue and report as much information as is relavent to issue you're experiencing.
+- Open an issue If you find a bug or error. 
+- Report as much information as is relavent to issue you're experiencing.
 - Remember to omit your API Key information.
 - It's good practice to store your API Key externally from your environment.
 
 ## Contributions
 
+- Leave a Tip
+    - Every Satoshi goes a long way!
 - Anyone can help with the Documentation or Code Base.
     - A [GPG Signature](https://docs.github.com/en/authentication/managing-commit-signature-verification) is required to make a Pull Request.
-- Leave a Tip if you would like to support this project financially.
-    - I put a lot of time, effort, and energy into creating and maintaining this project.
-    - Every Satoshi goes a long way!
 
 ## Coinbase Exchange
 
 - Pro and Exchange are identical interfaces and only require you to modify the API URL.
-- More information can be found in docs/Messenger.md.
+- More information can be found in 01-Quickstart.md.

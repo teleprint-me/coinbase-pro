@@ -103,16 +103,16 @@ class Auth(AbstractAuth, AuthBase):
 
 
 class Messenger(AbstractMessenger):
-    def __init__(self, auth: AbstractAuth = None):
+    def __init__(self, auth: Auth = None):
         self.__auth: AbstractAuth = auth if auth else Auth()
         self.__session: Session = Session()
 
     @property
-    def auth(self) -> AbstractAuth:
+    def auth(self) -> Auth:
         return self.__auth
 
     @property
-    def api(self) -> AbstractAPI:
+    def api(self) -> API:
         return self.__auth.api
 
     @property
@@ -168,12 +168,13 @@ class Messenger(AbstractMessenger):
 
 
 class Subscriber(AbstractSubscriber):
-    def __init__(self, messenger: AbstractMessenger):
-        self.__messenger = messenger
+    def __init__(self, messenger: Messenger = None):
+        self.__messenger = messenger if messenger else Messenger()
 
     @property
-    def messenger(self) -> AbstractMessenger:
+    def messenger(self) -> Messenger:
         return self.__messenger
 
+    # NOTE: error is left here as a convenience method for plugs
     def error(self, response: Response) -> bool:
         return 200 != response.status_code
