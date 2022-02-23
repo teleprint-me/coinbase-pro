@@ -405,7 +405,7 @@ User.limits(user_id: str) -> dict
 ### Time.get
 
 ```python
-Product.get() -> dict
+Time.get() -> dict
 ```
 
 ## CoinbasePro
