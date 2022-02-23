@@ -15,17 +15,21 @@
 - [Read The Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
 
 ## Tasklist
-- [x] Coinbase Pro 
-- [x] Coinbase Exchange
-- [x] REST API 
+- [x] REST API
+  - [x] API Key Authentication
+  - [x] Coinbase Pro 
+  - [x] Coinbase Exchange
+  - [x] Plugins `[Experimental]`
 - [x] WSS API
-- [ ] Plugins `[In Progress]`
-- [x] Test Suite `[Using pytest]`
-- [ ] Install `[In Progress] [Bug]`
-- [x] Quickstart Guide
+  - [x] API Key Authentication
+- [x] Test Suite
 - [ ] API Documentation `[In Progress]`
+  - [x] Quickstart Guide
+- [ ] Install `[In Progress] [Bug]`
 
 ## Tips
-- Bitcoin (Segwit): 397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt
-- Ethereum: 0x7be933221135468b9886632771fF289341144C3a
-- Litecoin (Segwit): MBh6cTL6bHcLQSyWzyHG9FcVCDemoWQzTo
+
+- Buy me a coffee 
+- Bitcoin: [397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt](https://www.blockchain.com/btc/address/397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt)
+
+![Bitcoin QR Code](https://github.com/teleprint-me/coinbase/blob/main/assets/qr-bitcoin.png?raw=true)
