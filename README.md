@@ -32,4 +32,4 @@
 - Buy me a coffee 
 - Bitcoin: [397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt](https://www.blockchain.com/btc/address/397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt)
 
-![Bitcoin QR Code](https://github.com/teleprint-me/coinbase/blob/main/assets/qr-bitcoin.png?raw=true)
+![Bitcoin QR Code](https://github.com/teleprint-me/coinbase-pro/blob/main/assets/qr-bitcoin.png?raw=true)
