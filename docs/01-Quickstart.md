@@ -93,7 +93,7 @@ If you think your API Key is compromised in any way, then you should delete it a
 We can now install the coinbase-pro library.
 
 ```sh
-$ pip install --user git+https://github.com/teleprint-me/coinbase-pro.git
+$ pip install git+https://github.com/teleprint-me/coinbase-pro.git
 ```
 
 We can run a pip command to see if it shows up once it's installed.
@@ -102,7 +102,7 @@ We can run a pip command to see if it shows up once it's installed.
 $ pip list --format=columns
 Package      Version
 ------------ -------
-coinbase-pro 2.2.1
+coinbase-pro 2.4.3
 pip          21.3.1
 setuptools   60.1.0
 wheel        0.37.1
