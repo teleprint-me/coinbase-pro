@@ -4,14 +4,14 @@ language: python
 cache: pip
 
 python:
-  - 3.7
   - 3.8
   - 3.9
 
 install:
   - pip install -U pip
-  - pip install -U dateutils
-  - pip install -r requirements.txt
+  - pip install --user pipx
+  - pipx install poetry
+  - poetry install
 
 script:
-  - python -m pytest tests/
+  - poetry run pytest

@@ -38,21 +38,30 @@ If your plugin is more than one file, then you should create a self contained mo
 - Treat everyone respectfully; We're all human beings too.
 
 ## Setup
+
 ```sh
 git clone git@github.com:teleprint-me/coinbase-pro.git
 cd coinbase-pro
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
-touch main.py
+pip install --user pipx
+pipx install poetry
+poetry shell         # run virtualenv
+poetry install       # install deps and dev-deps
+touch main.py        # create a scratch pad
 cp tests/settings.json.example settings.json
 pytest -x            # run public tests
 pytest -x --private  # run public and private tests
+poetry build         # create a build
+deactivate           # exit virtualenv
 ```
 
+_Note: You can find more information about [poetry commands](https://python-poetry.org/docs/cli/) at their [official docs](https://python-poetry.org/docs/)._
+
+### Requirements
 - Use `flake8` for linting
 - Use `black` for formatting
 - Use `pytest` for testing
-- Use `make` for building
+- Use `poetry` for building and packaging
 - Use `git` for Branches, Tags, and Pull Requests
 - Add your handle to Contributors.md
+
+_Note: `flake8`, `black`, and `pytest` are included in the `pyproject.toml`. They are installed automatically as dependecies when `poetry install` is executed._

@@ -19,16 +19,8 @@
 
 ## Install
 
-### Local
-
 ```sh
-pip install --user git+https://github.com/teleprint-me/coinbase-pro.git#egg=coinbase-pro
-```
-
-### Global
-
-```sh
-pip install git+https://github.com/teleprint-me/coinbase-pro.git#egg=coinbase-pro
+pip install --user git+https://github.com/teleprint-me/coinbase-pro.git
 ```
 
 ## Coinbase Exchange

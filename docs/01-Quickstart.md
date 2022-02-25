@@ -93,7 +93,7 @@ If you think your API Key is compromised in any way, then you should delete it a
 We can now install the coinbase-pro library.
 
 ```sh
-$ pip install git+https://github.com/teleprint-me/coinbase-pro.git#egg=coinbase-pro
+$ pip install --user git+https://github.com/teleprint-me/coinbase-pro.git
 ```
 
 We can run a pip command to see if it shows up once it's installed.
@@ -117,25 +117,6 @@ bpython version 0.22.1 on top of Python 3.10.1
 >>> print(__version__)
 2.2.1
 >>> 
-```
-
-### Missing `websocket-client` dependency
-
-There is a known bug that prevents the `websocket-client` package from being installed. 
-I am looking into this issue and will release a patch once I've discoverd the bug.
-
-If you receive a `ModuleNotFoundError: No module named 'websocket'` error message, then you will have to manually install `websocket-client` instead. 
-
-If the `websocket-client` package dependency is missing and your project requires it, then you can issue the following command to resolve the missing dependency.
-
-```sh
-pip install websocket-client
-```
-
-If you want to install a specific version (recommended), then you can issue a similar command. You can check the current `requirements.txt` in the repository to verify the package version.
-
-```sh
-$ pip install websocket-client==1.2.3
 ```
 
 ## Messenger
