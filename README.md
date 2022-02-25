@@ -13,18 +13,16 @@
 ## Documentation
 - [Read The Documentation](https://github.com/teleprint-me/coinbase-pro/tree/main/docs)
 
-## Tasklist
+## Features
 - [x] REST API
-  - [x] API Key Authentication
-  - [x] Coinbase Pro 
-  - [x] Coinbase Exchange
-  - [x] Plugins `[Experimental]`
 - [x] WSS API
-  - [x] API Key Authentication
+- [x] API Key Authentication
+- [x] Coinbase Pro
+- [x] Coinbase Exchange
+- [x] Plugins `[Experimental]`
 - [x] Test Suite
-- [ ] API Documentation `[In Progress]`
-  - [x] Quickstart Guide
-- [ ] Install `[In Progress] [Bug]`
+- [x] Documentation
+- [x] Install
 
 ## Contributions
 

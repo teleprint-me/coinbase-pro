@@ -152,7 +152,7 @@ dmypy.json
 cython_debug/
 
 # Linters
-.flake8
+#.flake8
 
 # Sqlite Database Path
 db/

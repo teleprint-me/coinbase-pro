@@ -64,4 +64,4 @@ _Note: You can find more information about [poetry commands](https://python-poet
 - Use `git` for Branches, Tags, and Pull Requests
 - Add your handle to Contributors.md
 
-_Note: `flake8`, `black`, and `pytest` are included in the `pyproject.toml`. They are installed automatically as dependecies when `poetry install` is executed._
+_Note: `flake8`, `black`, and `pytest` are included in the `pyproject.toml`. They are installed automatically as dependecies when `poetry install` is executed. A `.flake8` config is included with the repository for local development._
