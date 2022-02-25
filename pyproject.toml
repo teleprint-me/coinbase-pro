@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "coinbase-pro"
-version = "2.4.4"
+version = "2.4.5"
 description = "Another Unofficial Python Wrapper for Coinbase Pro"
 authors = ["teleprint-me"]
 license = "AGPL"

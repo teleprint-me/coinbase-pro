@@ -15,5 +15,5 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 __agent__: str = "coinbase-pro"
 __source__: str = "https://github.com/teleprint-me/coinbase-pro"
-__version__: str = "2.4.4"
+__version__: str = "2.4.5"
 __limit__: float = 1 / 3.5
