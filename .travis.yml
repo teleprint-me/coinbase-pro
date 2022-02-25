@@ -9,8 +9,7 @@ python:
 
 install:
   - pip install -U pip
-  - pip install pipx
-  - pipx install poetry
+  - pip install poetry
   - poetry install
 
 script:
