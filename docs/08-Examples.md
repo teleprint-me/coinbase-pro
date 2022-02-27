@@ -2,17 +2,23 @@
 
 _Note: For clarification, `Client` is the abstract reference, `client` is the instance reference, and `CoinbasePro` is the implementation reference. I use the terms `client`, `Client`, and `CoinbasePro` interchangably. Treat them as synonyms for the sake of simplicity._
 
-## REST API Documentation
+## Did you read the Quickstart?
+Recommended Prerequisites in the following order:
+
+1) `docs/01-Quickstart.md`
+2) `docs/03-Messenger.md` 
+3) `docs/04-Client.md`
+
+### API Key Authentication
+The `docs/01-Quickstart -> Setup` section covers how to setup your API Key for Authentication. Reference the `Setup` section if you have not setup an API Key for Authentication seeing as some of the following examples will require them.
+
+### REST API Documentation
 You must read the [Official Coinbase Documentation](https://docs.cloud.coinbase.com/exchange/docs) in order to understand the Python implementation of the API. You will need to study both the REST API, and the Python API, in order to maximize the API's full potential.
 
-## REST API Reference
+### REST API Reference
 You should have the [Official Coinbase Reference](https://docs.cloud.coinbase.com/exchange/reference) open and available in order to understand what arguments are being made and why. 
 
 In most cases, the `data` argument will be a `dict`, the keys will be the `Param`, and the values are the `Query`. This will become clearer as we go through the examples. 
-
-## API Key Authentication
-The `docs/01-Quickstart -> Setup` section covers how to setup your API Key for Authentication. Reference the `Setup` section if you have not setup an API Key for Authentication seeing as some of the following examples will require them.
-
 
 ## Example 1: Setting up a Messenger or Client instance
 
@@ -57,7 +63,7 @@ def get_settings(filename: str) -> dict:
 client = get_client(get_settings("settings.json")["box"])
 ```
 
-## Example 2: Client is a strategy of composition
+## Example 2: Client is a Composition of Strategy
 The `client` object is a composition of the strategy pattern. All other classes are independently defined and reference their respective scope via a method or property. The default `Subscriber` instances that make up the composition of `CoinbasePro` are defined in `docs/04-Client.md`. This means we can access a section of the API by simply referencing its identifier.
 
 ### The Client, Subscriber, and Method model
@@ -182,4 +188,8 @@ pprint(candles)
 ```
 
 ## Summary
-This entire process is a skill that is developed over time. Don't feel bad or stupid if you don't understand this process. It takes time, practice, and effort. Give your self credit where credit is due. The majority of people never make it to the end of any form of documentation. Make sure to experiment with snippets like these to make sure your expectations are correct. You'll eventually get the hang of it. Understanding documentation and code are the hardest parts of coding. So, just keep at it.
+This entire process is a skill that is developed over time. Don't feel bad or stupid if you don't understand this process. It takes time, practice, and effort. Give your self credit where credit is due. The majority of people never make it to the end of any form of documentation. Make sure to experiment with snippets like these to make sure your expectations are correct. You'll eventually get the hang of it. Understanding documentation and code are the hardest parts of coding. 
+
+So, just keep at it.
+
+> [Give a man a fish, and you feed him for a day. Teach a man to fish, and you feed him for a lifetime.](https://quoteinvestigator.com/2015/08/28/fish/)
