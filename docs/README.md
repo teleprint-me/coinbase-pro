@@ -10,6 +10,7 @@
 - 05-Socket.md
 - 06-Tests.md
 - 07-Development.md
+- 08-Examples.md
 
 ## Notes
 
