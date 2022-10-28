@@ -7,6 +7,12 @@
 (___/(_)(_/ / /_/_)(_/(_/_)_(/_  /   / (_(_)
 ```
 
+## Deprecated
+
+This library is [officially deprecated](https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/what-is-advanced-trade) as of 2022-11-21. Coinbase will begin migrating Pro accounts to their base application. This API is still valid for Exchange and Commerce accounts. I do not have a need for Exchange or Commerce trading and have decided to arhive this repository. 
+
+I do plan on supporting the core Coinbase API. Please refer to [teleprint-me/coinbase](https://github.com/teleprint-me/coinbase) instead.
+
 ## About
 - Another Unofficial Python Wrapper for Coinbase Pro 
 
@@ -23,11 +29,3 @@
 - [x] Test Suite
 - [x] Documentation
 - [x] Install
-
-## Contributions
-
-- Leave a Tip
-    - Every Satoshi goes a long way!
-    - Bitcoin: [397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt](https://www.blockchain.com/btc/address/397d3tB2Mr6ECBjeZH9FU1v1UMnaKc2SVt)
-
-![Bitcoin QR Code](https://github.com/teleprint-me/coinbase-pro/blob/main/assets/qr-bitcoin.png?raw=true)
