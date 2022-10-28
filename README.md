@@ -9,7 +9,7 @@
 
 ## Deprecated
 
-This library is [officially deprecated](https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/what-is-advanced-trade) as of 2022-11-21. Coinbase will begin migrating Pro accounts to their base application. This API is still valid for Exchange and Commerce accounts. I do not have a need for Exchange or Commerce trading and have decided to arhive this repository. 
+This library is [officially deprecated](https://help.coinbase.com/en/coinbase/trading-and-funding/advanced-trade/what-is-advanced-trade) as of 2022-11-21. Coinbase will begin migrating Pro accounts to their base application. This API is still valid for Exchange and Commerce accounts. I do not have a need for Exchange or Commerce trading and have decided to archive this repository. 
 
 I do plan on supporting the core Coinbase API. Please refer to [teleprint-me/coinbase](https://github.com/teleprint-me/coinbase) instead.
 
